@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useWalletClient } from "wagmi";
 import { farcasterMiniApp } from "@farcaster/miniapp-wagmi-connector";
 import sdk from "@farcaster/miniapp-sdk";
 import { bringid } from "@/lib/bringid";
+import { useBringIDContext } from "@/app/providers";
 
 type Task = {
   id: string;
@@ -21,6 +22,11 @@ export function MainApp() {
   const { address, isConnected } = useAccount();
   const { connect, isPending: isConnecting } = useConnect();
   const { disconnect } = useDisconnect();
+  const { data: walletClient } = useWalletClient();
+  const { iframeReady } = useBringIDContext();
+
+  const signerReady = !!walletClient;
+  const canVerify = iframeReady && signerReady;
 
   const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -67,11 +73,20 @@ export function MainApp() {
             Connected: {address?.slice(0, 6)}…{address?.slice(-4)}
           </p>
           <button
-            style={styles.button}
+            style={{
+              ...styles.button,
+              ...(!canVerify || isVerifying ? styles.buttonDisabled : {}),
+            }}
             onClick={handleVerify}
-            disabled={isVerifying}
+            disabled={!canVerify || isVerifying}
           >
-            {isVerifying ? "Opening BringID…" : "Open BringID"}
+            {isVerifying
+              ? "Opening BringID…"
+              : !iframeReady
+              ? "Loading widget…"
+              : !signerReady
+              ? "Waiting for signer…"
+              : "Open BringID"}
           </button>
           <button
             style={{ ...styles.button, ...styles.disconnectButton }}
@@ -143,6 +158,11 @@ const styles: Record<string, React.CSSProperties> = {
   disconnectButton: {
     background: "#333",
     marginTop: "8px",
+  },
+  buttonDisabled: {
+    background: "#4a3a6b",
+    cursor: "not-allowed",
+    opacity: 0.6,
   },
   connectedBlock: {
     display: "flex",
