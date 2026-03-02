@@ -12,14 +12,14 @@ function BringIDProviderInner({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {walletClient && (
-        <BringIDModal
-          address={walletClient.account.address}
-          generateSignature={(message: string) =>
-            walletClient.signMessage({ message })
-          }
-        />
-      )}
+      <BringIDModal
+        address={walletClient?.account.address}
+        generateSignature={
+          walletClient
+            ? (message: string) => walletClient.signMessage({ message })
+            : undefined
+        }
+      />
       {children}
     </>
   );

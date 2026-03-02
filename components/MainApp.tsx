@@ -125,7 +125,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   subtitle: {
     fontSize: "16px",
-    color: "#888",
+    color: "#ffffff",
     margin: 0,
   },
   button: {
