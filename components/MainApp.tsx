@@ -31,6 +31,9 @@ export function MainApp() {
   const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const queryParams = typeof window !== "undefined"
+    ? Object.fromEntries(new URLSearchParams(window.location.search).entries())
+    : {};
 
   // Signal to Farcaster that the miniapp is ready
   useEffect(() => {
@@ -96,6 +99,18 @@ export function MainApp() {
           </button>
         </div>
       )}
+
+      <div style={styles.debugBlock}>
+        <div style={styles.debugTitle}>Query params:</div>
+        {Object.keys(queryParams).length === 0
+          ? <div style={styles.debugRow}>none</div>
+          : Object.entries(queryParams).map(([k, v]) => (
+            <div key={k} style={styles.debugRow}>
+              <b>{k}:</b> {v.length > 40 ? v.slice(0, 40) + '…' : v}
+            </div>
+          ))
+        }
+      </div>
 
       {error && <p style={styles.error}>{error}</p>}
 
@@ -215,5 +230,25 @@ const styles: Record<string, React.CSSProperties> = {
   },
   taskPending: {
     color: "#888",
+  },
+  debugBlock: {
+    width: "100%",
+    maxWidth: "380px",
+    background: "rgba(0,0,0,0.7)",
+    border: "1px solid #333",
+    borderRadius: "8px",
+    padding: "10px",
+    fontFamily: "monospace",
+    fontSize: "11px",
+    color: "#0f0",
+  },
+  debugTitle: {
+    fontWeight: 700,
+    marginBottom: "4px",
+    color: "#aaa",
+  },
+  debugRow: {
+    wordBreak: "break-all" as const,
+    lineHeight: "1.6",
   },
 };
