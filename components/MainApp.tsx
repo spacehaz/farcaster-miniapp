@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAccount, useConnect, useDisconnect, useWalletClient } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useWalletClient, useSwitchChain } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { farcasterMiniApp } from "@farcaster/miniapp-wagmi-connector";
 import sdk from "@farcaster/miniapp-sdk";
+import { base } from "wagmi/chains";
 import { bringid } from "@/lib/bringid";
 import { useBringIDContext } from "@/app/providers";
 
@@ -20,11 +21,19 @@ type VerifyResult = {
 };
 
 export function MainApp() {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chainId } = useAccount();
   const { connect, isPending: isConnecting } = useConnect();
   const { disconnect } = useDisconnect();
   const { data: walletClient } = useWalletClient();
+  const { switchChain } = useSwitchChain();
   const { iframeReady } = useBringIDContext();
+
+  // Auto-switch to Base when connected on wrong chain (e.g. Coinbase dapp browser)
+  useEffect(() => {
+    if (isConnected && chainId !== undefined && chainId !== base.id) {
+      switchChain({ chainId: base.id });
+    }
+  }, [isConnected, chainId, switchChain]);
 
   const signerReady = !!walletClient;
   const canVerify = iframeReady && signerReady;
