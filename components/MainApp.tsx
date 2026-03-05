@@ -133,6 +133,13 @@ export function MainApp() {
         </div>
       )}
 
+      <button
+        style={styles.button}
+        onClick={() => sdk.actions.openUrl('https://google.com')}
+      >
+        test open external url
+      </button>
+
       <div style={styles.debugBlock}>
         <div style={styles.debugTitle}>Query params:</div>
         {Object.keys(queryParams).length === 0
