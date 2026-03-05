@@ -38,14 +38,14 @@ export function MainApp() {
     }
   }, [isConnected, chainId, switchChain]);
 
+  const bringidRef = useRef<ReturnType<typeof createBringID> | null>(null);
+  const [isFarcaster, setIsFarcaster] = useState<boolean | null>(null);
+  const [platform, setPlatform] = useState<'farcaster' | 'base' | 'unknown' | null>(null);
+
   const redirectUrl = platform === 'base' ? COINBASE_REDIRECT_URL : FARCASTER_REDIRECT_URL;
 
   const signerReady = !!walletClient;
   const canVerify = iframeReady && signerReady;
-
-  const bringidRef = useRef<ReturnType<typeof createBringID> | null>(null);
-  const [isFarcaster, setIsFarcaster] = useState<boolean | null>(null);
-  const [platform, setPlatform] = useState<'farcaster' | 'base' | 'unknown' | null>(null);
   const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
