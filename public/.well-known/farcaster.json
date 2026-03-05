@@ -13,6 +13,7 @@
     "description": "Connect your Farcaster wallet and verify your humanity with BringID.",
     "screenshotUrls": [],
     "primaryCategory": "utility",
+    "imageUrl": "https://farcaster-miniapp-pi.vercel.app/image.png",
     "splashImageUrl": "https://farcaster-miniapp-pi.vercel.app/icon.png",
     "splashBackgroundColor": "#000000",
     "tags": ["identity", "verification", "bringid"]
