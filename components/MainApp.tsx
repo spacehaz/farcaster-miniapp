@@ -43,6 +43,7 @@ export function MainApp() {
   const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sdkContext, setSdkContext] = useState<string | null>(null);
   const queryParams = typeof window !== "undefined"
     ? Object.fromEntries(new URLSearchParams(window.location.search).entries())
     : {};
@@ -56,6 +57,7 @@ export function MainApp() {
           new Promise<null>((resolve) => setTimeout(() => resolve(null), 500)),
         ]);
         const inFarcaster = !!(ctx && (ctx as { user?: { fid?: number } }).user?.fid);
+        setSdkContext(JSON.stringify(ctx, null, 2));
         bringidRef.current = createBringID(inFarcaster);
         setIsFarcaster(inFarcaster);
         if (inFarcaster) {
@@ -139,6 +141,13 @@ export function MainApp() {
       >
         test open external url
       </button>
+
+      <div style={styles.debugBlock}>
+        <div style={styles.debugTitle}>SDK context:</div>
+        <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+          {sdkContext ?? "loading…"}
+        </pre>
+      </div>
 
       <div style={styles.debugBlock}>
         <div style={styles.debugTitle}>Query params:</div>
