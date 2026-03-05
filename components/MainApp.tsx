@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAccount, useConnect, useDisconnect, useWalletClient, useSwitchChain } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { farcasterMiniApp } from "@farcaster/miniapp-wagmi-connector";
 import sdk from "@farcaster/miniapp-sdk";
 import { base } from "wagmi/chains";
-import { bringid } from "@/lib/bringid";
+import { createBringID } from "@/lib/bringid";
 import { useBringIDContext } from "@/app/providers";
 
 type Task = {
@@ -38,6 +38,7 @@ export function MainApp() {
   const signerReady = !!walletClient;
   const canVerify = iframeReady && signerReady;
 
+  const bringidRef = useRef<ReturnType<typeof createBringID> | null>(null);
   const [isFarcaster, setIsFarcaster] = useState<boolean | null>(null);
   const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -55,11 +56,13 @@ export function MainApp() {
           new Promise<null>((resolve) => setTimeout(() => resolve(null), 500)),
         ]);
         const inFarcaster = !!(ctx && (ctx as { user?: { fid?: number } }).user?.fid);
+        bringidRef.current = createBringID(inFarcaster);
         setIsFarcaster(inFarcaster);
         if (inFarcaster) {
           sdk.actions.ready();
         }
       } catch {
+        bringidRef.current = createBringID(false);
         setIsFarcaster(false);
       }
     }
@@ -78,7 +81,7 @@ export function MainApp() {
     setError(null);
     setIsVerifying(true);
     try {
-      const result = await bringid.verifyHumanity();
+      const result = await bringidRef.current!.verifyHumanity();
       setVerifyResult(result as VerifyResult);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Verification failed");
