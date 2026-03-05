@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAccount, useConnect, useDisconnect, useWalletClient } from "wagmi";
+import { injected } from "wagmi/connectors";
 import { farcasterMiniApp } from "@farcaster/miniapp-wagmi-connector";
 import sdk from "@farcaster/miniapp-sdk";
 import { bringid } from "@/lib/bringid";
@@ -28,6 +29,7 @@ export function MainApp() {
   const signerReady = !!walletClient;
   const canVerify = iframeReady && signerReady;
 
+  const [isFarcaster, setIsFarcaster] = useState<boolean | null>(null);
   const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,13 +37,32 @@ export function MainApp() {
     ? Object.fromEntries(new URLSearchParams(window.location.search).entries())
     : {};
 
-  // Signal to Farcaster that the miniapp is ready
+  // Detect Farcaster context and signal ready if applicable
   useEffect(() => {
-    sdk.actions.ready();
+    async function init() {
+      try {
+        const ctx = await Promise.race([
+          sdk.context,
+          new Promise<null>((resolve) => setTimeout(() => resolve(null), 500)),
+        ]);
+        const inFarcaster = !!(ctx && (ctx as { user?: { fid?: number } }).user?.fid);
+        setIsFarcaster(inFarcaster);
+        if (inFarcaster) {
+          sdk.actions.ready();
+        }
+      } catch {
+        setIsFarcaster(false);
+      }
+    }
+    init();
   }, []);
 
   function handleConnect() {
-    connect({ connector: farcasterMiniApp() });
+    if (isFarcaster) {
+      connect({ connector: farcasterMiniApp() });
+    } else {
+      connect({ connector: injected() });
+    }
   }
 
   async function handleVerify() {
@@ -66,9 +87,9 @@ export function MainApp() {
         <button
           style={styles.button}
           onClick={handleConnect}
-          disabled={isConnecting}
+          disabled={isConnecting || isFarcaster === null}
         >
-          {isConnecting ? "Connecting…" : "Connect Wallet"}
+          {isConnecting ? "Connecting…" : isFarcaster === null ? "Loading…" : "Connect Wallet"}
         </button>
       ) : (
         <div style={styles.connectedBlock}>
