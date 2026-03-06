@@ -1,7 +1,7 @@
 import { BringID } from "bringid";
 
 export const FARCASTER_REDIRECT_URL = "https://farcaster.xyz/miniapps/1NIui4yTg5jf/bringid";
-export const COINBASE_REDIRECT_URL = "https://base.app/app/farcaster-miniapp-pi.vercel.app";
+export const COINBASE_REDIRECT_URL = "cbwallet://miniapp?url=farcaster-miniapp-pi.vercel.app";
 const DEFAULT_REDIRECT_URL = "https://farcaster-miniapp-pi.vercel.app";
 
 export function getRedirectUrl(platform: 'farcaster' | 'base' | 'unknown' | null): string {
