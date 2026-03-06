@@ -144,6 +144,15 @@ export function MainApp() {
         test open external url
       </button>
 
+      <a
+        href="https://google.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={styles.testLink}
+      >
+        test &lt;a&gt; tag link
+      </a>
+
       <div style={styles.debugBlock}>
         <div style={styles.debugTitle}>SDK context:</div>
         <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
@@ -281,6 +290,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   taskPending: {
     color: "#888",
+  },
+  testLink: {
+    fontSize: "13px",
+    color: "#a78bfa",
+    textDecoration: "underline",
+    cursor: "pointer",
   },
   debugBlock: {
     width: "100%",
