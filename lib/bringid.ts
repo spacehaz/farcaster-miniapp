@@ -12,7 +12,7 @@ export function getRedirectUrl(platform: 'farcaster' | 'base' | 'unknown' | null
 
 export function createBringID(platform: 'farcaster' | 'base' | 'unknown' | null) {
   return new BringID({
-    appId: "0x2b45542d8cb657f1d14f739c16033acabc57e44ca164e09eae16e7f332a41cd0",
+    appId: "0x52bbf72988e09b5cda2ba3315ad1adf05b9450ea85ce3c9cb9a2c34f444c5896",
     mode: "dev",
     redirectUrl: getRedirectUrl(platform),
   });
