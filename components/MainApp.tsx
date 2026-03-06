@@ -145,7 +145,7 @@ export function MainApp() {
       </button>
 
       <a
-        href="https://google.com"
+        href="https://base.app/app/farcaster-miniapp-pi.vercel.app%3Fbringid_message%3D%257B%2522domain%2522%253A%2522github.com%2522%252C%2522score%2522%253A70%252C%2522timestamp%2522%253A1772806253%252C%2522user_id%2522%253A%252210361308%2522%257D%26bringid_signature%3D0x425f7ca84f603a771b42d409c74f2e63c366bdfab6938bb14a5a3c3ca24c5d66624e6d3c132c2322c294b8f15f914ca7c298bbed85818e71524c6c1ad04819891c"
         target="_blank"
         rel="noopener noreferrer"
         style={styles.testLink}
