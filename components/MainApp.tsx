@@ -9,9 +9,6 @@ import { base } from "wagmi/chains";
 import { createBringID } from "@/lib/bringid";
 import { useBringIDContext } from "@/app/providers";
 
-const FARCASTER_REDIRECT_URL = "https://farcaster.xyz/miniapps/1NIui4yTg5jf/bringid";
-const COINBASE_REDIRECT_URL = "https://base.app/app/farcaster-miniapp-pi.vercel.app";
-
 type Task = {
   id: string;
   label: string;
@@ -40,9 +37,6 @@ export function MainApp() {
 
   const bringidRef = useRef<ReturnType<typeof createBringID> | null>(null);
   const [isFarcaster, setIsFarcaster] = useState<boolean | null>(null);
-  const [platform, setPlatform] = useState<'farcaster' | 'base' | 'unknown' | null>(null);
-
-  const redirectUrl = platform === 'base' ? COINBASE_REDIRECT_URL : FARCASTER_REDIRECT_URL;
 
   const signerReady = !!walletClient;
   const canVerify = iframeReady && signerReady;
@@ -65,14 +59,14 @@ export function MainApp() {
         const inFarcaster = !!(ctx && (ctx as { user?: { fid?: number } }).user?.fid);
         setSdkContext(JSON.stringify(ctx, null, 2));
         const clientFid = (ctx as { client?: { clientFid?: number } })?.client?.clientFid;
-        setPlatform(clientFid === 9152 ? 'farcaster' : clientFid === 309857 ? 'base' : 'unknown');
-        bringidRef.current = createBringID(inFarcaster);
+        const detectedPlatform: 'farcaster' | 'base' | 'unknown' = clientFid === 9152 ? 'farcaster' : clientFid === 309857 ? 'base' : 'unknown';
+        bringidRef.current = createBringID(detectedPlatform);
         setIsFarcaster(inFarcaster);
         if (inFarcaster) {
           sdk.actions.ready();
         }
       } catch {
-        bringidRef.current = createBringID(false);
+        bringidRef.current = createBringID('unknown');
         setIsFarcaster(false);
       }
     }
