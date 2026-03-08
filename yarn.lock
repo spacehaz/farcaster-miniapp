@@ -823,10 +823,10 @@ brace-expansion@^2.0.1:
   dependencies:
     balanced-match "^1.0.0"
 
-bringid@0.5.3-beta-rc.6:
-  version "0.5.3-beta-rc.6"
-  resolved "https://registry.yarnpkg.com/bringid/-/bringid-0.5.3-beta-rc.6.tgz#f56955ee9a7f79c2dc276b35a1669db297c19623"
-  integrity sha512-6Glejq+g4UVt4dIAU77AsUv7UGtne05rdpVgT35T6R0YPpLJhAaSw/mr7nNGASTGO6hCTMIQTLAEkzHE6c+qEw==
+bringid@0.5.3-beta:
+  version "0.5.3-beta"
+  resolved "https://registry.yarnpkg.com/bringid/-/bringid-0.5.3-beta.tgz#fa513a3bde0d51460b428f9c381e42f484d10bd7"
+  integrity sha512-ZXZjwrdT3PBQHK3zTdWF7J8IQuyjZBQixsPACM4MGT3zoVPH2zSlgNzUJmugLr6z1+Kq7S8ztFyFoC+DyHDX9g==
   dependencies:
     "@farcaster/miniapp-sdk" "^0.2.3"
     "@semaphore-protocol/core" "^4.13.1"
