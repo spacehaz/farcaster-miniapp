@@ -27,7 +27,7 @@ function BringIDProviderInner({ children }: { children: React.ReactNode }) {
             ? (message: string) => walletClient.signMessage({ message })
             : undefined
         }
-        connectUrl="https://staging.widget.bringid.org"
+        // connectUrl="https://staging.widget.bringid.org"
         iframeOnLoad={() => setIframeReady(true)}
       />
       {children}
